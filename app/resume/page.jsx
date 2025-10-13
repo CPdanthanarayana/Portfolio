@@ -164,13 +164,12 @@ const Resume = () => {
 
                         <h3 className="text-xl text-left">{item.degree}</h3>
 
-                        {/* dot + institute */}
-                        <p className="text-white/60 break-words flex items-center gap-1">
-                          <span className="w-[6px] h-[6px] rounded-full bg-accent inline-block"></span>
+                        <p className="text-white/60 break-words">
+                          <span className="w-[6px] h-[13px] rounded-full bg-accent inline-block"></span>{" "}
                           {item.institute}
                         </p>
                       </li>
-                    ))}
+                    ))}g
                   </ul>
                 </ScrollArea>
               </div>
@@ -220,7 +219,10 @@ const Resume = () => {
                 </p>
                 <ul className="max-w-[620px] mx-auto xl:mx-0 ">
                   {about.info.map((item, index) => (
-                    <li key={index} className="flex text-left gap-2 flex-wrap py-3">
+                    <li
+                      key={index}
+                      className="flex text-left gap-2 flex-wrap py-3"
+                    >
                       <span className="text-white/60 min-w-[90px] sm:min-w-[110px] inline-block">
                         {item.fieldName}:
                       </span>
