@@ -169,7 +169,7 @@ const Resume = () => {
                           {item.institute}
                         </p>
                       </li>
-                    ))}g
+                    ))}
                   </ul>
                 </ScrollArea>
               </div>
