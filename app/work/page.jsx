@@ -17,7 +17,6 @@ import {
 
 import Link from "next/link";
 import Image from "next/image";
-import { Description } from "@radix-ui/react-dialog";
 import WorkSliderBtns from "@/components/WorkSliderBtns";
 
 const projects = [
@@ -93,7 +92,7 @@ const Work = () => {
   };
 
   return (
-    <motion.div
+    <motion.section
       initial={{ opacity: 0 }}
       animate={{
         opacity: 1,
@@ -193,7 +192,7 @@ const Work = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </motion.section>
   );
 };
 
