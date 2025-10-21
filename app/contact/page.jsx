@@ -35,8 +35,72 @@ const info = [
 ];
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleServiceChange = (value) => {
+    setFormData({ ...formData, service: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_ACCESS_KEY,
+          name: `${formData.firstname} ${formData.lastname}`,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus("success");
+        setFormData({
+          firstname: "",
+          lastname: "",
+          email: "",
+          phone: "",
+          service: "",
+          message: "",
+        });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -50,7 +114,10 @@ const Contact = () => {
         <div className="flex flex-col xl:flex-row gap-[30px]">
           {/* form */}
           <div className="xl:w-[54%] order-2 xl:order-none">
-            <form className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl"
+            >
               <h3 className="text-4xl text-accent">Let's work together</h3>
               <p className="text-white/60">
                 Ready to bring your ideas to life? As a passionate Full-Stack
@@ -63,13 +130,43 @@ const Contact = () => {
               </p>
               {/* input */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input type="text" placeholder="Firstname" />
-                <Input type="text" placeholder="Lastname" />
-                <Input type="email" placeholder="Email address" />
-                <Input type="tel" placeholder="Phone number" />
+                <Input
+                  type="text"
+                  name="firstname"
+                  placeholder="Firstname"
+                  value={formData.firstname}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  type="text"
+                  name="lastname"
+                  placeholder="Lastname"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
               {/* select */}
-              <Select>
+              <Select
+                value={formData.service}
+                onValueChange={handleServiceChange}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a Service" />
                 </SelectTrigger>
@@ -93,11 +190,34 @@ const Contact = () => {
               </Select>
               {/* textarea */}
               <Textarea
+                name="message"
                 className="h-[200px]"
                 placeholder="Type Your message here."
+                value={formData.message}
+                onChange={handleChange}
+                required
               />
-              <Button size="md" className="max-w-40">
-                Send message
+
+              {/* Status messages */}
+              {submitStatus === "success" && (
+                <p className="text-green-500 text-center">
+                  ✓ Message sent successfully! I'll get back to you soon.
+                </p>
+              )}
+              {submitStatus === "error" && (
+                <p className="text-red-500 text-center">
+                  ✗ Failed to send message. Please try again or email me
+                  directly.
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                size="md"
+                className="max-w-40"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Send message"}
               </Button>
             </form>
           </div>
