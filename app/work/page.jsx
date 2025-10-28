@@ -61,7 +61,7 @@ const projects = [
     ],
     image: "/assets/work/project-3.jpg",
     live: "",
-    github: "",
+    github: "https://github.com/CPdanthanarayana/Fixora.git",
   },
   {
     num: "04",
@@ -77,7 +77,7 @@ const projects = [
     ],
     image: "/assets/work/project-4.jpg",
     live: "",
-    github: "",
+    github: "https://github.com/HashenWatawala/Community-project.git",
   },
 ];
 
