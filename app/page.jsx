@@ -39,6 +39,7 @@ export default function Home() {
                 className="uppercase flex items-center gap-2"
               >
                 <a href="/assets/CV.pdf" download>
+                  <span>Download CV</span>
                   <FiDownload className="text-xl" />
                 </a>
               </Button>
